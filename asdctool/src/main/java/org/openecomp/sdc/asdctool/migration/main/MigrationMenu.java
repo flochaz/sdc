@@ -36,7 +36,12 @@ public class MigrationMenu extends SpringCLITool {
         MigrationMenu migrationMenu = new MigrationMenu();
         CLIToolData cliToolData = migrationMenu.init(args);
         boolean enforceAll = cliToolData.getCommandLine().hasOption("e");
-        migrationMenu.doMigrate(enforceAll, cliToolData.getSpringApplicationContext());
+        AbstractApplicationContext context = ApplicliToolData.getSpringApplicationContext();
+        try {
+            migrationMenu.doMigrate(enforceAll, cliToolData.getSpringApplicationContext() );
+        } finally {
+            context.close();
+        }
     }
 
     private static Option buildEnforceAllOption() {
